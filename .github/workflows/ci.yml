@@ -1,0 +1,38 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🛠 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install Dependencies
+        run: |
+          pip install -r fastapi/requirements.txt
+          pip install -r streamlit/requirements.txt
+
+      - name: Run FastAPI Test
+        run: |
+          cd fastapi
+          python -m unittest discover -s tests
+
+      - name: Build Docker Compose
+        run: |
+          docker-compose up -d --build
+          sleep 10
+          docker-compose ps

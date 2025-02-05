@@ -47,5 +47,4 @@ fastapi/.mypy_cache/
 streamlit/__pycache__/
 streamlit/.streamlit/
 
-# GitHub Actions 실행 결과 캐시 방지
-.github/
+
