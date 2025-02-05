@@ -1,0 +1,51 @@
+# Python 관련
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+
+# 가상 환경 (venv)
+venv/
+.env
+*.env
+
+# 로그 및 임시 파일
+*.log
+*.out
+*.pid
+.DS_Store
+*.swp
+
+# Docker 관련
+*.tar
+*.img
+docker-compose.override.yml
+
+# IDE 및 에디터 설정
+.vscode/
+.idea/
+*.iml
+
+# Airflow 관련 (데이터베이스 및 캐시)
+airflow/airflow.cfg
+airflow/unittests.cfg
+airflow/logs/
+airflow/tmp/
+airflow_db/
+
+# Elasticsearch 데이터 (로컬 실행 시 생길 수 있음)
+elasticsearch/data/
+elasticsearch/logs/
+
+# FastAPI 관련 (캐시)
+fastapi/__pycache__/
+fastapi/.pytest_cache/
+fastapi/.mypy_cache/
+
+# Streamlit 관련
+streamlit/__pycache__/
+streamlit/.streamlit/
+
+# GitHub Actions 실행 결과 캐시 방지
+.github/
