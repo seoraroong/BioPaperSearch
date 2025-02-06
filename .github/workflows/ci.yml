@@ -26,13 +26,23 @@ jobs:
           pip install -r fastapi/requirements.txt
           pip install -r streamlit/requirements.txt
 
-      - name: Debug - Check docker-compose.yml 존재 여부
-        run: ls -R
+      - name: 🔍 Check Docker & Docker Compose
+        run: |
+          docker --version
+          docker compose version || true
+          docker-compose version || true
+
+      - name: Install Docker Compose (if needed)
+        run: |
+          if ! command -v docker-compose &> /dev/null; then
+            sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+          fi
+          docker-compose version
 
       - name: Build and Start Containers
         run: |
-          cd elasticsearch  # ✅ docker-compose.yml이 있는 디렉토리로 이동
-          ls  # ✅ 확인용
+          cd elasticsearch  # ✅ `docker-compose.yml`이 있는 디렉토리로 이동
           docker-compose up -d --build
           sleep 10
           docker-compose ps
