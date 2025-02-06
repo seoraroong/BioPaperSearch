@@ -1,4 +1,4 @@
-name: CD Pipeline
+name: CD Pipeline 🚀
 
 on:
   push:
@@ -10,15 +10,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout Repository 🛠️
         uses: actions/checkout@v4
 
-      - name: Login to Docker Hub
+      - name: Install Docker 🔧
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker.io
+
+      - name: Login to Docker Hub 🔑
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Build & Push Docker Image
+      - name: Build & Push FastAPI Docker Image 📦
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/biosearch-fastapi:latest fastapi
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/biosearch-streamlit:latest streamlit
+          cd fastapi
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/biosearch-fastapi:latest .
+          docker tag ${{ secrets.DOCKER_USERNAME }}/biosearch-fastapi:latest ${{ secrets.DOCKER_USERNAME }}/biosearch-fastapi:${{ github.sha }}
           docker push ${{ secrets.DOCKER_USERNAME }}/biosearch-fastapi:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/biosearch-fastapi:${{ github.sha }}
+
+      - name: Build & Push Streamlit Docker Image 📦
+        run: |
+          cd streamlit
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/biosearch-streamlit:latest .
+          docker tag ${{ secrets.DOCKER_USERNAME }}/biosearch-streamlit:latest ${{ secrets.DOCKER_USERNAME }}/biosearch-streamlit:${{ github.sha }}
           docker push ${{ secrets.DOCKER_USERNAME }}/biosearch-streamlit:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/biosearch-streamlit:${{ github.sha }}
