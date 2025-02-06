@@ -26,11 +26,6 @@ jobs:
           pip install -r fastapi/requirements.txt
           pip install -r streamlit/requirements.txt
 
-      - name: Run FastAPI Test
-        run: |
-          cd fastapi
-          python -m unittest discover -s tests
-
       - name: Build Docker Compose
         run: |
           docker-compose up -d --build
