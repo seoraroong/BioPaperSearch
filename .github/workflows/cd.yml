@@ -13,13 +13,9 @@ jobs:
       - name: Checkout Repository 🛠️
         uses: actions/checkout@v4
 
-      - name: Remove Conflicting `containerd` Package 🗑️
-        run: sudo apt-get remove -y containerd || true
-
       - name: Install Docker 🔧
         run: |
-          sudo apt-get update
-          sudo apt-get install -y docker.io
+          curl -fsSL https://get.docker.com | sh
 
       - name: Login to Docker Hub 🔑
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
@@ -28,14 +24,14 @@ jobs:
         run: |
           cd fastapi
           docker build -t ${{ secrets.DOCKER_USERNAME }}/biosearch-fastapi:latest .
-          docker tag ${{ secrets.DOCKER_USERNAME }}/biosearch-fastapi:latest ${{ secrets.DOCKER_USERNAME }}/biosearch-fastapi:${{ github.sha }}
+          docker tag ${{ secrets.DOCKER_USERNAME }}/biosearch-fastapi:latest ${{ secrets.DOCKER_USERNAME }}/biosearch-fastapi:$GITHUB_SHA
           docker push ${{ secrets.DOCKER_USERNAME }}/biosearch-fastapi:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/biosearch-fastapi:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/biosearch-fastapi:$GITHUB_SHA
 
       - name: Build & Push Streamlit Docker Image 📦
         run: |
           cd streamlit
           docker build -t ${{ secrets.DOCKER_USERNAME }}/biosearch-streamlit:latest .
-          docker tag ${{ secrets.DOCKER_USERNAME }}/biosearch-streamlit:latest ${{ secrets.DOCKER_USERNAME }}/biosearch-streamlit:${{ github.sha }}
+          docker tag ${{ secrets.DOCKER_USERNAME }}/biosearch-streamlit:latest ${{ secrets.DOCKER_USERNAME }}/biosearch-streamlit:$GITHUB_SHA
           docker push ${{ secrets.DOCKER_USERNAME }}/biosearch-streamlit:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/biosearch-streamlit:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/biosearch-streamlit:$GITHUB_SHA
